@@ -8,7 +8,7 @@ Image gallery view makes it easy to view multiple images at once
 - [Community Support](#community-support)
 
 ## Installation
-Add Emoji Dialog Picker to your pubspec.yaml
+Add Image Gallery View to your pubspec.yaml
 ```yaml
 dependencies:
   image_gallery_view: ^1.0.0
