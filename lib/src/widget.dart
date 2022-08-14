@@ -30,16 +30,16 @@ class ImageGalleryView extends StatefulWidget {
   final List<String> thumbnailUrls;
 
   /// {@template image_gallery_view.activeIndex}
-  /// Index of the active image.
+  /// Index of the active image
   /// {@endtemplate}
   final int activeIndex;
 
   /// {@template image_gallery_view.thumbnailSize}
-  /// Size of thumbnail image
+  /// Sets the size of the displayed thumbnail images
   /// {@endtemplate}
   final double thumbnailSize;
 
-  /// Widget to display for the back icon
+  /// Widget to display as the back button
   final Widget? backButton;
 
   /// Alignment of back button

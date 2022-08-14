@@ -5,6 +5,7 @@ Image gallery view makes it easy to view multiple images at once
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Parameters](#parameters)
 - [Community Support](#community-support)
 
 ## Installation
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Demo Usage',
       home: ImageGalleryView(
         imageUrls: _imageUrls,
         thumbnailUrls: _thumbnailUrls,
@@ -57,6 +58,19 @@ class MyApp extends StatelessWidget {
 }
 
 ```
+
+## Parameters
+
+### ImageGalleryView
+#### Required:
+- imageUrls -  List of image urls
+- thumbnailUrls - List of image thumbnail urls
+
+#### Optional:
+- activeIndex - Index of the active image
+- thumbnailSize - Sets the size of the displayed thumbnail images
+- backButton - Widget to display as the back button
+- backButtonAlignment - Alignment of back button
 
 ## Community Support
 
