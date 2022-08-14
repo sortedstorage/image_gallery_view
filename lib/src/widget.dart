@@ -250,18 +250,34 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                             opacity = 0;
                           }
 
-                          return AnimatedOpacity(
-                            duration: const Duration(milliseconds: 150),
-                            opacity: opacity,
-                            child: GestureDetector(
-                              onTap: imageGalleryCubit.moveToPreviousImage,
-                              child: const SizedBox(
-                                height: double.infinity,
-                                width: 100,
-                                child: Icon(
-                                  Icons.arrow_back_ios,
-                                  size: 48,
-                                  color: Colors.white,
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: AnimatedOpacity(
+                              duration: const Duration(milliseconds: 150),
+                              opacity: opacity,
+                              child: GestureDetector(
+                                onTap: imageGalleryCubit.moveToPreviousImage,
+                                child: SizedBox(
+                                  height: double.infinity,
+                                  width: 100,
+                                  child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF202020).withOpacity(0.3),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Icon(
+                                          Icons.arrow_back_ios,
+                                          size: 48,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -289,19 +305,32 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                             opacity = 0;
                           }
 
-                          return AnimatedOpacity(
-                            duration: const Duration(milliseconds: 150),
-                            opacity: opacity,
-                            child: GestureDetector(
-                              onTap: () => imageGalleryCubit
-                                  .moveToNextImage(widget.images.length),
-                              child: const SizedBox(
-                                height: double.infinity,
-                                width: 100,
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 48,
-                                  color: Colors.white,
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: AnimatedOpacity(
+                              duration: const Duration(milliseconds: 150),
+                              opacity: opacity,
+                              child: GestureDetector(
+                                onTap: () => imageGalleryCubit
+                                    .moveToNextImage(widget.images.length),
+                                child: SizedBox(
+                                  height: double.infinity,
+                                  width: 100,
+                                  child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF202020).withOpacity(0.3),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 48,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -311,18 +340,24 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                 ),
                 Align(
                   alignment: widget.backButtonAlignment,
-                  child: widget.backButton ??
-                      InkWell(
-                        customBorder: const CircleBorder(),
-                        onTap: Navigator.of(context).pop,
-                        child: const Padding(
-                          padding: EdgeInsets.only(top: 24, left: 24),
-                          child: Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.white,
+                  child: widget.backButton ?? Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 16, right: 16),
+                        child: InkWell(
+                          onTap: Navigator.of(context).pop,
+                          child: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF202020).withOpacity(0.3),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.arrow_back_ios_new,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
                       ),
+                    ),
                 ),
               ],
             );
