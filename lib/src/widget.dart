@@ -269,7 +269,7 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                                     ),
                                     child: const Center(
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 8.0),
+                                        padding: EdgeInsets.only(left: 12.0),
                                         child: Icon(
                                           Icons.arrow_back_ios,
                                           size: 48,
