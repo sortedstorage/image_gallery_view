@@ -69,8 +69,10 @@ class MyApp extends StatelessWidget {
 #### Optional:
 - activeIndex - Index of the active image
 - thumbnailSize - Sets the size of the displayed thumbnail images
-- backButton - Widget to display as the back button
-- backButtonAlignment - Alignment of back button
+- backButton - `Widget` to display as the back button
+- backButtonAlignment - `Alignment` of back button
+- text - Text to overlay on top of the image
+- textStyle - `TextStyle` to use for text
 
 ## Community Support
 

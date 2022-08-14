@@ -19,6 +19,8 @@ class ImageGalleryView extends StatefulWidget {
     this.thumbnailSize = 100,
     this.backButton,
     this.backButtonAlignment = Alignment.topLeft,
+    this.text,
+    this.textStyle,
   }) : super(key: key);
 
   /// List of image urls
@@ -44,6 +46,12 @@ class ImageGalleryView extends StatefulWidget {
 
   /// Alignment of back button
   final Alignment backButtonAlignment;
+
+  /// Text to overlay on top of the image
+  final String? text;
+
+  /// [TextStyle] to use for text
+  final TextStyle? textStyle;
 
   @override
   State<ImageGalleryView> createState() => _ImageGalleryViewState();
@@ -94,24 +102,53 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                   left: 0,
                   right: 0,
                   bottom: widget.thumbnailSize + 75,
-                  child: Center(
-                    child: CachedNetworkImage(
-                      imageUrl: widget.imageUrls[state],
-                      placeholder: (context, url) => Stack(
-                        children: [
-                          Center(
-                            child: Image.network(
-                              widget.thumbnailUrls[state],
-                              fit: BoxFit.cover,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CachedNetworkImage(
+                          imageUrl: widget.imageUrls[state],
+                          placeholder: (context, url) => Stack(
+                            children: [
+                              Center(
+                                child: Image.network(
+                                  widget.thumbnailUrls[state],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          ),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      if (widget.text != null)
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 24),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white.withOpacity(0.5),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 12),
+                                child: Text(
+                                  widget.text!,
+                                  style: widget.textStyle ??
+                                      const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          overflow: TextOverflow.ellipsis),
+                                ),
+                              ),
                             ),
                           ),
-                          const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ],
-                      ),
-                      fit: BoxFit.contain,
-                    ),
+                        ),
+                    ],
                   ),
                 ),
                 Align(
