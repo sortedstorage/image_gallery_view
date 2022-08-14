@@ -6,6 +6,17 @@ import 'package:image_gallery_view/src/cubit/mouse_hover_cubit.dart';
 
 import 'cubit/mouse_hover_state.dart';
 
+class ImageGalleryItem {
+  ImageGalleryItem({
+    required this.imageUrl,
+    required this.thumbnailUrl,
+    this.text,
+  });
+  String imageUrl;
+  String thumbnailUrl;
+  String? text;
+}
+
 /// {@template image_gallery_view.ImageGalleryView}
 /// A widget that displays a gallery of images.
 /// {@endtemplate}
@@ -13,23 +24,18 @@ class ImageGalleryView extends StatefulWidget {
   /// {@macro image_gallery_view.ImageGalleryView}
   const ImageGalleryView({
     Key? key,
-    required this.imageUrls,
-    required this.thumbnailUrls,
+    required this.images,
     this.activeIndex = 0,
     this.thumbnailSize = 100,
     this.backButton,
     this.backButtonAlignment = Alignment.topLeft,
-    this.text,
     this.textStyle,
   }) : super(key: key);
 
-  /// List of image urls
-  final List<String> imageUrls;
-
-  /// {@template image_gallery_view.thumbnailUrls}
-  /// List of image thumbnail urls
+  /// {@template image_gallery_view.images}
+  /// List of images urls
   /// {@endtemplate}
-  final List<String> thumbnailUrls;
+  final List<ImageGalleryItem> images;
 
   /// {@template image_gallery_view.activeIndex}
   /// Index of the active image
@@ -46,9 +52,6 @@ class ImageGalleryView extends StatefulWidget {
 
   /// Alignment of back button
   final Alignment backButtonAlignment;
-
-  /// Text to overlay on top of the image
-  final String? text;
 
   /// [TextStyle] to use for text
   final TextStyle? textStyle;
@@ -106,12 +109,12 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                     children: [
                       Center(
                         child: CachedNetworkImage(
-                          imageUrl: widget.imageUrls[state],
+                          imageUrl: widget.images[state].imageUrl,
                           placeholder: (context, url) => Stack(
                             children: [
                               Center(
-                                child: Image.network(
-                                  widget.thumbnailUrls[state],
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.images[state].thumbnailUrl,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -123,7 +126,7 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      if (widget.text != null)
+                      if (widget.images[state].text != null)
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -137,7 +140,7 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 12),
                                 child: Text(
-                                  widget.text!,
+                                  widget.images[state].text!,
                                   style: widget.textStyle ??
                                       const TextStyle(
                                           color: Colors.black,
@@ -179,7 +182,7 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                             ),
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: widget.imageUrls.length,
+                              itemCount: widget.images.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding:
@@ -204,18 +207,16 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                                                 padding:
                                                     const EdgeInsets.all(3),
                                                 child: _ThumbnailView(
-                                                  index: index,
-                                                  thumbnailUrls:
-                                                      widget.thumbnailUrls,
+                                                  thumbnailUrl:
+                                                      widget.images[index].thumbnailUrl,
                                                   thumbnailSize:
                                                       widget.thumbnailSize,
                                                 ),
                                               ),
                                             )
                                           : _ThumbnailView(
-                                              index: index,
-                                              thumbnailUrls:
-                                                  widget.thumbnailUrls,
+                                              thumbnailUrl:
+                                                  widget.images[index].thumbnailUrl,
                                               thumbnailSize:
                                                   widget.thumbnailSize,
                                             ),
@@ -293,7 +294,7 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                             opacity: opacity,
                             child: GestureDetector(
                               onTap: () => imageGalleryCubit
-                                  .moveToNextImage(widget.imageUrls.length),
+                                  .moveToNextImage(widget.images.length),
                               child: const SizedBox(
                                 height: double.infinity,
                                 width: 100,
@@ -332,12 +333,12 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
   void _cacheImages(BuildContext context, int activeIndex) {
     if (activeIndex - 1 >= 0) {
       precacheImage(
-          CachedNetworkImageProvider(widget.imageUrls[activeIndex - 1]),
+          CachedNetworkImageProvider(widget.images[activeIndex - 1].imageUrl),
           context);
     }
-    if (activeIndex + 1 < widget.imageUrls.length) {
+    if (activeIndex + 1 < widget.images.length) {
       precacheImage(
-          CachedNetworkImageProvider(widget.imageUrls[activeIndex + 1]),
+          CachedNetworkImageProvider(widget.images[activeIndex + 1].imageUrl),
           context);
     }
   }
@@ -346,16 +347,12 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
 class _ThumbnailView extends StatelessWidget {
   const _ThumbnailView({
     Key? key,
-    required this.index,
-    required this.thumbnailUrls,
+    required this.thumbnailUrl,
     required this.thumbnailSize,
   }) : super(key: key);
 
-  /// {@macro image_gallery_view.activeIndex}
-  final int index;
-
-  /// {@macro image_gallery_view.thumbnailUrls}
-  final List<String> thumbnailUrls;
+  /// {@macro image_gallery_view.thumbnailUrl}
+  final String thumbnailUrl;
 
   /// {@macro image_gallery_view.thumbnailSize}
   final double thumbnailSize;
@@ -373,7 +370,7 @@ class _ThumbnailView extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         clipBehavior: Clip.antiAlias,
         child: Image.network(
-          thumbnailUrls[index],
+          thumbnailUrl,
           fit: BoxFit.contain,
         ),
       ),
