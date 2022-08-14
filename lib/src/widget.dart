@@ -1,26 +1,49 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_view/src/cubit/image_gallery_cubit.dart';
 import 'package:image_gallery_view/src/cubit/mouse_hover_cubit.dart';
 
 import 'cubit/mouse_hover_state.dart';
 
+/// {@template image_gallery_view.ImageGalleryView}
+/// A widget that displays a gallery of images.
+/// {@endtemplate}
 class ImageGalleryView extends StatefulWidget {
+  /// {@macro image_gallery_view.ImageGalleryView}
   const ImageGalleryView({
     Key? key,
     required this.imageUrls,
     required this.thumbnailUrls,
     this.activeIndex = 0,
+    this.thumbnailSize = 100,
+    this.backButton,
+    this.backButtonAlignment = Alignment.topLeft,
   }) : super(key: key);
 
   /// List of image urls
   final List<String> imageUrls;
 
+  /// {@template image_gallery_view.thumbnailUrls}
   /// List of image thumbnail urls
+  /// {@endtemplate}
   final List<String> thumbnailUrls;
 
-  /// Index of active image
+  /// {@template image_gallery_view.activeIndex}
+  /// Index of the active image.
+  /// {@endtemplate}
   final int activeIndex;
+
+  /// {@template image_gallery_view.thumbnailSize}
+  /// Size of thumbnail image
+  /// {@endtemplate}
+  final double thumbnailSize;
+
+  /// Widget to display for the back icon
+  final Widget? backButton;
+
+  /// Alignment of back button
+  final Alignment backButtonAlignment;
 
   @override
   State<ImageGalleryView> createState() => _ImageGalleryViewState();
@@ -66,23 +89,29 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
 
             return Stack(
               children: [
-                Center(
-                  child: CachedNetworkImage(
-                    imageUrl: widget.imageUrls[state],
-                    placeholder: (context, url) => Stack(
-                      children: [
-                        Center(
-                          child: Image.network(
-                            widget.thumbnailUrls[state],
-                            fit: BoxFit.cover,
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: widget.thumbnailSize + 75,
+                  child: Center(
+                    child: CachedNetworkImage(
+                      imageUrl: widget.imageUrls[state],
+                      placeholder: (context, url) => Stack(
+                        children: [
+                          Center(
+                            child: Image.network(
+                              widget.thumbnailUrls[state],
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ],
+                      ),
+                      fit: BoxFit.contain,
                     ),
-                    fit: BoxFit.contain,
                   ),
                 ),
                 Align(
@@ -90,7 +119,7 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 24),
                     child: Container(
-                      height: 127,
+                      height: widget.thumbnailSize + 27,
                       width: mediaQuery.size.width * 0.6,
                       decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
@@ -103,46 +132,61 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                           horizontal: 8,
                         ),
                         child: SizedBox(
-                          height: 105,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.imageUrls.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: GestureDetector(
-                                    onTap: () => imageGalleryCubit
-                                        .changeActiveImage(index),
-                                    child: state == index
-                                        ? DecoratedBox(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                color: const Color(0xFF4ED1FF),
-                                                width: 3,
+                          height: widget.thumbnailSize + 5,
+                          child: ScrollConfiguration(
+                            behavior: ScrollConfiguration.of(context).copyWith(
+                              dragDevices: {
+                                PointerDeviceKind.touch,
+                                PointerDeviceKind.mouse,
+                              },
+                            ),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.imageUrls.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () => imageGalleryCubit
+                                          .changeActiveImage(index),
+                                      child: state == index
+                                          ? DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                border: Border.all(
+                                                  color:
+                                                      const Color(0xFF4ED1FF),
+                                                  width: 3,
+                                                ),
                                               ),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(3),
-                                              child: _ThumbnailView(
-                                                index: index,
-                                                thumbnailUrls:
-                                                    widget.thumbnailUrls,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(3),
+                                                child: _ThumbnailView(
+                                                  index: index,
+                                                  thumbnailUrls:
+                                                      widget.thumbnailUrls,
+                                                  thumbnailSize:
+                                                      widget.thumbnailSize,
+                                                ),
                                               ),
+                                            )
+                                          : _ThumbnailView(
+                                              index: index,
+                                              thumbnailUrls:
+                                                  widget.thumbnailUrls,
+                                              thumbnailSize:
+                                                  widget.thumbnailSize,
                                             ),
-                                          )
-                                        : _ThumbnailView(
-                                            index: index,
-                                            thumbnailUrls: widget.thumbnailUrls,
-                                          ),
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -228,19 +272,20 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                   ),
                 ),
                 Align(
-                  alignment: Alignment.topLeft,
-                  child: InkWell(
-                    customBorder: const CircleBorder(),
-                    onTap: Navigator.of(context).pop,
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 24, left: 24),
-                      child: Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.white,
+                  alignment: widget.backButtonAlignment,
+                  child: widget.backButton ??
+                      InkWell(
+                        customBorder: const CircleBorder(),
+                        onTap: Navigator.of(context).pop,
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 24, left: 24),
+                          child: Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )
+                ),
               ],
             );
           }),
@@ -266,15 +311,23 @@ class _ThumbnailView extends StatelessWidget {
     Key? key,
     required this.index,
     required this.thumbnailUrls,
+    required this.thumbnailSize,
   }) : super(key: key);
+
+  /// {@macro image_gallery_view.activeIndex}
   final int index;
+
+  /// {@macro image_gallery_view.thumbnailUrls}
   final List<String> thumbnailUrls;
+
+  /// {@macro image_gallery_view.thumbnailSize}
+  final double thumbnailSize;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      width: 100,
+      height: thumbnailSize,
+      width: thumbnailSize,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: const Color(0xFF383838),
