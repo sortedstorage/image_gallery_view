@@ -143,9 +143,9 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                                   widget.images[state].text!,
                                   style: widget.textStyle ??
                                       const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
                                 ),
                               ),
                             ),
@@ -207,16 +207,17 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                                                 padding:
                                                     const EdgeInsets.all(3),
                                                 child: _ThumbnailView(
-                                                  thumbnailUrl:
-                                                      widget.images[index].thumbnailUrl,
+                                                  thumbnailUrl: widget
+                                                      .images[index]
+                                                      .thumbnailUrl,
                                                   thumbnailSize:
                                                       widget.thumbnailSize,
                                                 ),
                                               ),
                                             )
                                           : _ThumbnailView(
-                                              thumbnailUrl:
-                                                  widget.images[index].thumbnailUrl,
+                                              thumbnailUrl: widget
+                                                  .images[index].thumbnailUrl,
                                               thumbnailSize:
                                                   widget.thumbnailSize,
                                             ),
@@ -264,7 +265,8 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                                     width: 48,
                                     height: 48,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF202020).withOpacity(0.3),
+                                      color: const Color(0xFF202020)
+                                          .withOpacity(0.3),
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Center(
@@ -320,7 +322,8 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                                     width: 48,
                                     height: 48,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF202020).withOpacity(0.3),
+                                      color: const Color(0xFF202020)
+                                          .withOpacity(0.3),
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Center(
@@ -340,8 +343,10 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                 ),
                 Align(
                   alignment: widget.backButtonAlignment,
-                  child: widget.backButton ?? Padding(
-                        padding: const EdgeInsets.only(left: 8, top: 16, right: 16),
+                  child: widget.backButton ??
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 8, top: 16, right: 16),
                         child: InkWell(
                           onTap: Navigator.of(context).pop,
                           child: Container(
@@ -356,8 +361,8 @@ class _ImageGalleryViewState extends State<ImageGalleryView> {
                               color: Colors.white,
                             ),
                           ),
+                        ),
                       ),
-                    ),
                 ),
               ],
             );

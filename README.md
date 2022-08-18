@@ -12,7 +12,7 @@ Image gallery view makes it easy to view multiple images at once
 Add Image Gallery View to your pubspec.yaml
 ```yaml
 dependencies:
-  image_gallery_view: ^1.0.0
+  image_gallery_view: ^1.0.0+1
 ```
 
 ## Usage

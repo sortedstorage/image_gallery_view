@@ -1,6 +1,6 @@
 name: image_gallery_view
 description: Image gallery view makes it easy to display a gallery of images.
-version: 1.0.0
+version: 1.0.0+1
 homepage: https://github.com/sortedstorage/image_gallery_view
 
 environment:
